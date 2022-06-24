@@ -13,7 +13,12 @@ function App() {
   // b = set
   let [a, b] = useState('남자 코트 추천');  // Destructuring 문법, let [a, b] = [1, 2];
   let [titles, setTitles] = useState(['서울', '대전', '강남']);
-  let [dates,setDate] = useState(['06. 25', '06. 26', '06. 27']);
+  let [dates, setDates] = useState(['06. 25', '06. 26', '06. 27']);
+  let [likes, setLikes] = useState([0])
+  
+  function rename() {
+    setTitles[0]('부산')
+  }
 
   // return 안에는 1개의 태그만 넣을 수 있음.
   return (
@@ -26,7 +31,8 @@ function App() {
         <h4>{blogName}</h4>
       </div>
       <div className='list'>
-        <h4>{titles[0]}</h4>
+        {/* onClick에는 함수 이름만 넣어야 함 */}
+        <h4>{titles[0]} <span onClick={() => {setLikes([likes[0]+1])}}>{likes[0]}</span></h4>
         <p>{dates[0]}</p>
       </div>
       <div className='list'>
@@ -37,6 +43,7 @@ function App() {
         <h4>{titles[2]}</h4>
         <p>{dates[2]}</p>
       </div>
+      <button onClick={() => { setTitles(['부산', titles[1], titles[2]]) } }>{}</button>
 
       {/* 변수를 넣을 땐 중괄호, 데이터 바인딩 */}
       {/* <h4>{post}</h4> */}
