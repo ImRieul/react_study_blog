@@ -17,6 +17,7 @@ function App() {
   let [likes, setLikes] = useState([0, 0, 0]);
 
   let [modal, setModal] = useState(false);
+  let [number, setNumber] = useState(null);
 
   // 랜더링 안에 재랜더링 시키는 코드가 있으면 무한 반복 시작
   // let titles_sort = titles.sort()
@@ -27,6 +28,16 @@ function App() {
     let copy2 = Array.from(titles);  // 값을 복사, [...titles]도 가능
     copy2[0] = '부산';
     setTitles(copy2);
+  }
+
+  function detail(value, index, arr) {
+    if (!!modal && value === document.getElementsByClassName('modal')[0].getElementsByTagName('h4')[0].innerHTML) {
+      setModal(false);
+    }
+    else {
+      setModal(true);
+      setNumber(index);
+    }
   }
 
   // return 안에는 1개의 태그만 넣을 수 있음.
@@ -45,7 +56,7 @@ function App() {
           return (
             // 반복문으로 삽입하는 html에는 key속성을 추가해야 리액트가 구분할 수 있음
             <div className='list' key={count}>
-              <h4 onClick={ () => {setModal(modal? false: true)} }>{titles[count]}
+              <h4 onClick={ () => { detail(val, count) } }>{titles[count]}
                 <span onClick={() => { setLikes(likes.map( (val_in, count_in) => { return count_in === count? val_in+1 : val_in })) }}> {likes[count]}</span>
               </h4>
               <p>{dates[count]}</p>
@@ -73,7 +84,7 @@ function App() {
       {/* state 말고 변수나 문자 모두 가능 */}
       {/* 부모 -> 자식만 가능 */}
       {
-        modal? <Modal titles={titles}></Modal> : null
+        modal? <Modal titles={titles} number={number} rename={rename}></Modal> : null
       }
 
       {/* 변수를 넣을 땐 중괄호, 데이터 바인딩 */}
@@ -86,9 +97,10 @@ function App() {
 function Modal(props) {
   return (
     <div className='modal'>
-      <h4>{ props.titles[0] }</h4>
+      <h4>{ props.titles[props.number] }</h4>
       <p>date</p>
       <p>content</p>
+      <button onClick={() => {props.rename()}}>rename</button>
     </div>
   )
 }
