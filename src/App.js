@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function App() {
 
@@ -12,12 +12,19 @@ function App() {
   // a = 보관한 자료
   // b = set
   let [a, b] = useState('남자 코트 추천');  // Destructuring 문법, let [a, b] = [1, 2];
-  let [titles, setTitles] = useState(['서울', '대전', '강남']);
+  let [titles, setTitles] = useState(['서울', '대전', '강남'].sort());
   let [dates, setDates] = useState(['06. 25', '06. 26', '06. 27']);
   let [likes, setLikes] = useState([0])
+
+  // 랜더링 안에 재랜더링 시키는 코드가 있으면 무한 반복 시작
+  // let titles_sort = titles.sort()
+  // setTitles(titles_sort)
   
   function rename() {
-    setTitles[0]('부산')
+    let copy1 = titles;  // 포인터를 복사
+    let copy2 = Array.from(titles);  // 값을 복사, [...titles]도 가능
+    copy2[0] = '부산';
+    setTitles(copy2);
   }
 
   // return 안에는 1개의 태그만 넣을 수 있음.
@@ -43,12 +50,25 @@ function App() {
         <h4>{titles[2]}</h4>
         <p>{dates[2]}</p>
       </div>
-      <button onClick={() => { setTitles(['부산', titles[1], titles[2]]) } }>{}</button>
+      <Modal></Modal>
+      <Modal/>
+      <button onClick={() => { rename() } }>rename</button>
 
       {/* 변수를 넣을 땐 중괄호, 데이터 바인딩 */}
       {/* <h4>{post}</h4> */}
     </div>
   );
+}
+
+// component
+function Modal() {
+  return (
+    <div className='modal'>
+      <h4>Title</h4>
+      <p>date</p>
+      <p>content</p>
+    </div>
+  )
 }
 
 export default App;
