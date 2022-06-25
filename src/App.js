@@ -16,8 +16,12 @@ function App() {
   let [dates, setDates] = useState(['06. 25', '06. 26', '06. 27']);
   let [likes, setLikes] = useState([0, 0, 0]);
 
+  // modal
   let [modal, setModal] = useState(false);
   let [number, setNumber] = useState(null);
+
+  // new
+  let [write, setWrite] = useState('');
 
   // 랜더링 안에 재랜더링 시키는 코드가 있으면 무한 반복 시작
   // let titles_sort = titles.sort()
@@ -31,6 +35,7 @@ function App() {
   }
 
   function detail(value, index, arr) {
+    // 완전 하드 코딩.. ㅠ
     if (!!modal && value === document.getElementsByClassName('modal')[0].getElementsByTagName('h4')[0].innerHTML) {
       setModal(false);
     }
@@ -38,6 +43,23 @@ function App() {
       setModal(true);
       setNumber(index);
     }
+  }
+
+  function newWrite() {
+    if (write !== '') {
+      setTitles(titles.concat([write]));
+      setDates(dates.concat(['06. 25']));
+      setLikes(likes.concat([0]));
+    }
+  }
+
+  function deleteWrite(count) {
+    let titlesCopy = Array.from(titles)
+    let datesCopy = Array.from(dates)
+    let likesCopy = Array.from(likes)
+
+    titlesCopy.splice(count, 1); datesCopy.splice(count, 1); likesCopy.splice(count, 1); 
+    setTitles(titlesCopy); setDates(datesCopy); setLikes(likesCopy)
   }
 
   // return 안에는 1개의 태그만 넣을 수 있음.
@@ -60,25 +82,16 @@ function App() {
                 <span onClick={() => { setLikes(likes.map( (val_in, count_in) => { return count_in === count? val_in+1 : val_in })) }}> {likes[count]}</span>
               </h4>
               <p>{dates[count]}</p>
+              <button onClick={() => { deleteWrite(count) }}>Delete</button>
             </div>
           )
         })
       }
 
-      {/* <div className='list'> */}
-        {/* onClick에는 함수 이름만 넣어야 함 */}
-        {/* <h4 onClick={ () => {setModal(modal? false: true)} }>{titles[0]} <span onClick={() => {setLikes([likes[0]+1])}}>{likes[0]}</span></h4> */}
-        {/* <p>{dates[0]}</p> */}
-      {/* </div> */}
-      {/* <div className='list'> */}
-        {/* <h4>{titles[1]}</h4> */}
-        {/* <p>{dates[1]}</p> */}
-      {/* </div> */}
-      {/* <div className='list'> */}
-        {/* <h4>{titles[2]}</h4> */}
-        {/* <p>{dates[2]}</p> */}
-      {/* </div> */}
-      <button onClick={() => { rename() } }>rename</button>
+      {/* write */}
+      <input onChange={(event) => { setWrite(event.target.value) }} />
+      <button onClick={() => { newWrite() }}>write
+      </button>
 
       {/* props하려는 속성값은 무한히 지정할 수 있음. */}
       {/* state 말고 변수나 문자 모두 가능 */}
