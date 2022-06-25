@@ -14,7 +14,9 @@ function App() {
   let [a, b] = useState('남자 코트 추천');  // Destructuring 문법, let [a, b] = [1, 2];
   let [titles, setTitles] = useState(['서울', '대전', '강남'].sort());
   let [dates, setDates] = useState(['06. 25', '06. 26', '06. 27']);
-  let [likes, setLikes] = useState([0])
+  let [likes, setLikes] = useState([0, 0, 0]);
+
+  let [modal, setModal] = useState(false);
 
   // 랜더링 안에 재랜더링 시키는 코드가 있으면 무한 반복 시작
   // let titles_sort = titles.sort()
@@ -37,22 +39,42 @@ function App() {
         {/* <h4 style={ {color: 'red', fontSize: '16px'} }>This is Blog</h4> */}
         <h4>{blogName}</h4>
       </div>
-      <div className='list'>
+
+      {
+        titles.map( (val, count) => {
+          return (
+            // 반복문으로 삽입하는 html에는 key속성을 추가해야 리액트가 구분할 수 있음
+            <div className='list' key={count}>
+              <h4 onClick={ () => {setModal(modal? false: true)} }>{titles[count]}
+                <span onClick={() => { setLikes(likes.map( (val_in, count_in) => { return count_in === count? val_in+1 : val_in })) }}> {likes[count]}</span>
+              </h4>
+              <p>{dates[count]}</p>
+            </div>
+          )
+        })
+      }
+
+      {/* <div className='list'> */}
         {/* onClick에는 함수 이름만 넣어야 함 */}
-        <h4>{titles[0]} <span onClick={() => {setLikes([likes[0]+1])}}>{likes[0]}</span></h4>
-        <p>{dates[0]}</p>
-      </div>
-      <div className='list'>
-        <h4>{titles[1]}</h4>
-        <p>{dates[1]}</p>
-      </div>
-      <div className='list'>
-        <h4>{titles[2]}</h4>
-        <p>{dates[2]}</p>
-      </div>
-      <Modal></Modal>
-      <Modal/>
+        {/* <h4 onClick={ () => {setModal(modal? false: true)} }>{titles[0]} <span onClick={() => {setLikes([likes[0]+1])}}>{likes[0]}</span></h4> */}
+        {/* <p>{dates[0]}</p> */}
+      {/* </div> */}
+      {/* <div className='list'> */}
+        {/* <h4>{titles[1]}</h4> */}
+        {/* <p>{dates[1]}</p> */}
+      {/* </div> */}
+      {/* <div className='list'> */}
+        {/* <h4>{titles[2]}</h4> */}
+        {/* <p>{dates[2]}</p> */}
+      {/* </div> */}
       <button onClick={() => { rename() } }>rename</button>
+
+      {/* props하려는 속성값은 무한히 지정할 수 있음. */}
+      {/* state 말고 변수나 문자 모두 가능 */}
+      {/* 부모 -> 자식만 가능 */}
+      {
+        modal? <Modal titles={titles}></Modal> : null
+      }
 
       {/* 변수를 넣을 땐 중괄호, 데이터 바인딩 */}
       {/* <h4>{post}</h4> */}
@@ -61,10 +83,10 @@ function App() {
 }
 
 // component
-function Modal() {
+function Modal(props) {
   return (
     <div className='modal'>
-      <h4>Title</h4>
+      <h4>{ props.titles[0] }</h4>
       <p>date</p>
       <p>content</p>
     </div>
